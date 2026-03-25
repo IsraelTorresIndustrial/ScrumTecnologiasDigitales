@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scrum Dashboard - Tecnologías Digitales</title>
+    <title>Scrum Dashboard Académico</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,12 +12,23 @@
 <body>
     <header class="navbar">
         <div class="container header-content">
-            <h1>📊 Scrum Dashboard Académico</h1>
+            <div class="logo-area">
+                <h1>📊 SCRUM ACADÉMICO</h1>
+                <span class="subtitle">Panel de Control</span>
+            </div>
             <div class="filtros">
-                <label for="filtro-seccion">Sección:</label>
-                <select id="filtro-seccion">
-                    <option value="Todas">Todas las secciones</option>
+                <div class="filtro-grupo">
+                    <label for="filtro-docente">Docente:</label>
+                    <select id="filtro-docente">
+                        <option value="Todos">Cargando...</option>
                     </select>
+                </div>
+                <div class="filtro-grupo">
+                    <label for="filtro-seccion">Sección:</label>
+                    <select id="filtro-seccion" disabled>
+                        <option value="Todas">Seleccione docente primero</option>
+                    </select>
+                </div>
             </div>
         </div>
     </header>
@@ -28,17 +39,25 @@
                 <h3>Total Grupos</h3>
                 <p id="kpi-total">0</p>
             </div>
+            <div class="kpi-card kpi-aldia">
+                <h3>Al Día</h3>
+                <p id="kpi-aldia">0</p>
+            </div>
+            <div class="kpi-card kpi-seguimiento">
+                <h3>En Seguimiento</h3>
+                <p id="kpi-seguimiento">0</p>
+            </div>
             <div class="kpi-card kpi-critico">
-                <h3>Grupos Críticos</h3>
+                <h3>Críticos</h3>
                 <p id="kpi-criticos">0</p>
             </div>
         </section>
 
         <div id="loader" class="loader">
-            <p>🔄 Conectando con la base de datos de Google Sheets...</p>
+            <p>🔄 Conectando con el Motor Scrum...</p>
         </div>
 
-        <section id="dashboard-grid" class="grid">
+        <section id="dashboard-grid" class="grid hidden">
             </section>
     </main>
 
