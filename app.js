@@ -2,7 +2,6 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzMUFExh_Pyb94BbeUSrQ68
 
 let baseDatos = [];
 
-// Paleta referencial para JS
 const COLORES = {
     'Al Día': '#2563eb',
     'En seguimiento': '#d97706',
@@ -28,7 +27,7 @@ async function cargarDatos() {
         baseDatos = await respuesta.json();
         
         document.getElementById('loader').classList.add('hidden');
-        document.getElementById('dashboard-grid').classList.remove('hidden');
+        document.getElementById('mensaje-inicio').classList.remove('hidden');
         
         poblarFiltroDocentes();
     } catch (error) {
@@ -41,20 +40,19 @@ function poblarFiltroDocentes() {
     const selector = document.getElementById('filtro-docente');
     const docentes = [...new Set(baseDatos.map(item => item['Docente']))].filter(Boolean);
     
-    selector.innerHTML = '<option value="Todos">Vista Maestra (Todos)</option>';
+    selector.innerHTML = '<option value="" disabled selected>Seleccione un docente...</option>';
     docentes.forEach(doc => {
         selector.innerHTML += `<option value="${doc}">${doc}</option>`;
     });
     
-    actualizarSelectorSecciones('Todos');
-    renderizarDashboard();
+    actualizarSelectorSecciones('');
 }
 
 function actualizarSelectorSecciones(docenteSeleccionado) {
     const selectorSec = document.getElementById('filtro-seccion');
     
-    if (docenteSeleccionado === 'Todos') {
-        selectorSec.innerHTML = '<option value="Todas">Todas las secciones</option>';
+    if (!docenteSeleccionado || docenteSeleccionado === '') {
+        selectorSec.innerHTML = '<option value="Todas">Seleccione docente primero</option>';
         selectorSec.disabled = true;
         return;
     }
@@ -73,14 +71,30 @@ function renderizarDashboard() {
     const docente = document.getElementById('filtro-docente').value;
     const seccion = document.getElementById('filtro-seccion').value;
     const grid = document.getElementById('dashboard-grid');
+    const mensajeInicio = document.getElementById('mensaje-inicio');
+    
     grid.innerHTML = ''; 
 
-    // 1. Filtrar
-    let datosFiltrados = baseDatos;
-    if (docente !== 'Todos') datosFiltrados = datosFiltrados.filter(g => g['Docente'] === docente);
-    if (seccion !== 'Todas' && seccion !== '') datosFiltrados = datosFiltrados.filter(g => g['Sección'].toString() === seccion);
+    // Bloqueo si no hay docente elegido
+    if (!docente || docente === '') {
+        document.getElementById('kpi-total').textContent = '0';
+        document.getElementById('kpi-aldia').textContent = '0';
+        document.getElementById('kpi-seguimiento').textContent = '0';
+        document.getElementById('kpi-criticos').textContent = '0';
+        mensajeInicio.classList.remove('hidden');
+        grid.classList.add('hidden');
+        return;
+    }
 
-    // 2. Ordenamiento Triage (Crítico -> Seguimiento -> Al Día) y luego por ID
+    mensajeInicio.classList.add('hidden');
+    grid.classList.remove('hidden');
+
+    let datosFiltrados = baseDatos.filter(g => g['Docente'] === docente);
+    if (seccion !== 'Todas' && seccion !== '') {
+        datosFiltrados = datosFiltrados.filter(g => g['Sección'].toString() === seccion);
+    }
+
+    // Ordenamiento Triage y luego por ID
     const jerarquia = { 'Crítico': 1, 'En seguimiento': 2, 'Al Día': 3 };
     datosFiltrados.sort((a, b) => {
         if (jerarquia[a['ESTADO_GENERAL']] !== jerarquia[b['ESTADO_GENERAL']]) {
@@ -89,25 +103,23 @@ function renderizarDashboard() {
         return a['ID_Grupo'].localeCompare(b['ID_Grupo']);
     });
 
-    // 3. Actualizar KPIs
+    // Actualizar KPIs
     document.getElementById('kpi-total').textContent = datosFiltrados.length;
     document.getElementById('kpi-aldia').textContent = datosFiltrados.filter(g => g['ESTADO_GENERAL'] === 'Al Día').length;
     document.getElementById('kpi-seguimiento').textContent = datosFiltrados.filter(g => g['ESTADO_GENERAL'] === 'En seguimiento').length;
     document.getElementById('kpi-criticos').textContent = datosFiltrados.filter(g => g['ESTADO_GENERAL'] === 'Crítico').length;
 
-    // 4. Dibujar Tarjetas
+    // Dibujar Tarjetas
     datosFiltrados.forEach(grupo => {
         const estado = grupo['ESTADO_GENERAL'];
         const color = COLORES[estado] || '#ccc';
 
-        // Parsear Equipo
         let equipoHtml = `<li class="lider">👤 ${grupo['Líder']} (Líder)</li>`;
         try {
             const equipoArr = JSON.parse(grupo['Equipo_JSON']);
             equipoArr.forEach(int => { equipoHtml += `<li>${int}</li>`; });
         } catch(e) {}
 
-        // Parsear Alertas
         let alertasHtml = '';
         try {
             const alertasArr = JSON.parse(grupo['Alertas_JSON']);
@@ -116,7 +128,6 @@ function renderizarDashboard() {
             });
         } catch(e) {}
 
-        // Dibujar Tarjeta
         const card = document.createElement('div');
         card.className = 'card';
         card.style.borderTopColor = color;
