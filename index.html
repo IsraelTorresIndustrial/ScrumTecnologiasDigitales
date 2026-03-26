@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -53,16 +54,53 @@
             </div>
         </section>
 
-        <div id="loader" class="loader">
-            <p>🔄 Conectando con el Motor Scrum...</p>
+        <div id="loader" class="loader"><p>🔄 Conectando con el Motor Scrum...</p></div>
+        <div id="mensaje-inicio" class="loader hidden"><p>👆 Por favor, seleccione un docente para visualizar los datos.</p></div>
+
+        <div id="tabs-container" class="tabs hidden">
+            <button class="tab-btn active" onclick="cambiarVista('operativa')">🗂️ Vista Operativa (Tarjetas)</button>
+            <button class="tab-btn" onclick="cambiarVista('analitica')">📈 Vista Analítica (Gráficos)</button>
         </div>
 
-        <div id="mensaje-inicio" class="loader hidden">
-            <p>👆 Por favor, seleccione un docente para visualizar los grupos.</p>
-        </div>
-
-        <section id="dashboard-grid" class="grid hidden">
+        <section id="vista-operativa" class="grid hidden">
             </section>
+
+        <section id="vista-analitica" class="analitica-grid hidden">
+            
+            <div class="chart-card">
+                <div class="chart-info">
+                    <h3>Dispersión: Gestión vs. Calidad</h3>
+                    <p>Relación entre el cumplimiento del marco de trabajo (Eje X: Reuniones) y la calidad del producto (Eje Y: Hitos).<br><br>
+                    <strong>Lectura:</strong> Un equipo abajo a la derecha se reúne bien pero requiere apoyo técnico urgente. Un equipo arriba a la izquierda entrega bien pero bajo estrés de héroes individuales (riesgo de colapso).</p>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chartDispersion"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-info">
+                    <h3>Análisis Frecuencial de Impedimentos</h3>
+                    <p>Distribución de las alertas levantadas por el Scrum Master en la semana en curso.<br><br>
+                    <strong>Lectura:</strong> Identifica si un problema es aislado (variación especial de un grupo) o si es sistémico (variación común). Si una barra domina, el docente debe re-explicar instrucciones al curso completo en la próxima cátedra.</p>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chartAlertas"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card chart-full">
+                <div class="chart-info">
+                    <h3>Curva Longitudinal de Hitos</h3>
+                    <p>Evolución del promedio aritmético de la sección por cada hito evaluado.<br><br>
+                    <strong>Lectura:</strong> Caídas pronunciadas (deltas negativos fuertes) entre un hito y otro evidencian un salto desproporcionado en la dificultad del proyecto o una falta de preparación técnica en ese bloque del programa.</p>
+                </div>
+                <div class="chart-canvas-container">
+                    <canvas id="chartTendencia"></canvas>
+                </div>
+            </div>
+
+        </section>
     </main>
 
     <script src="app.js"></script>
