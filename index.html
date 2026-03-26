@@ -20,7 +20,7 @@
                 <div class="filtro-grupo">
                     <label for="filtro-docente">Docente:</label>
                     <select id="filtro-docente">
-                        <option value="Todos">Cargando...</option>
+                        <option value="" disabled selected>Cargando docentes...</option>
                     </select>
                 </div>
                 <div class="filtro-grupo">
@@ -57,9 +57,17 @@
             <p>🔄 Conectando con el Motor Scrum...</p>
         </div>
 
+        <div id="mensaje-inicio" class="loader hidden">
+            <p>👆 Por favor, seleccione un docente para visualizar los grupos.</p>
+        </div>
+
         <section id="dashboard-grid" class="grid hidden">
             </section>
     </main>
+
+    <footer class="site-footer">
+        <p>Desarrollado y automatizado por <a href="https://israeltorresindustrial.github.io/Israel-Torres-Web/#inicio" target="_blank" rel="noopener noreferrer">Israel Torres</a></p>
+    </footer>
 
     <script src="app.js"></script>
 </body>
