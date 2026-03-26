@@ -153,3 +153,81 @@ body {
     color: #475569;
     padding: 40px 0;
 }
+/* ==========================================
+   DISEÑO RESPONSIVO (Móviles y Tablets)
+========================================== */
+@media (max-width: 850px) {
+    /* 1. Encabezado y Filtros (Se apilan a lo ancho) */
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .filtros {
+        width: 100%;
+        flex-direction: column;
+    }
+    .filtro-grupo {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    .filtro-grupo select {
+        width: 100%;
+    }
+
+    /* 2. KPIs (Se ponen en formato 2x2 en lugar de 4 en línea) */
+    .kpi-panel {
+        flex-wrap: wrap;
+    }
+    .kpi-card {
+        flex: 1 1 40%; /* Toma la mitad de la pantalla */
+    }
+
+    /* 3. Tarjeta Mini-Dashboard (De 2 columnas pasa a 1 columna) */
+    .card {
+        grid-template-columns: 1fr; 
+        grid-template-rows: auto;
+    }
+    
+    /* La lista de integrantes pasa arriba y pierde el borde derecho */
+    .card-left {
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 15px;
+    }
+
+    .card-right {
+        padding: 15px;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* 4. Tracker de Hitos (Scroll horizontal si la pantalla es enana) */
+    .hitos-tracker {
+        overflow-x: auto;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+    
+    .timeline-line {
+        min-width: 30px; /* Evita que la línea desaparezca si se aprieta mucho */
+    }
+
+    /* 5. Métricas Rápidas y Footer (Se apilan en tarjetas verticales) */
+    .metricas-rapidas {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .card-footer {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 15px;
+    }
+}
