@@ -127,3 +127,32 @@ body {
 }
 .card-footer strong { color: #0f172a; }
 .contact-item { display: flex; align-items: center; gap: 6px; }
+
+/* --- Footer (Créditos) --- */
+.site-footer {
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 40px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-family: var(--font-body);
+}
+
+.site-footer a {
+    color: var(--color-aldia);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.site-footer a:hover {
+    color: #1e40af; /* Azul más oscuro al pasar el mouse */
+    text-decoration: underline;
+}
+
+#mensaje-inicio {
+    font-size: 1.1rem;
+    color: #475569;
+    padding: 40px 0;
+}
